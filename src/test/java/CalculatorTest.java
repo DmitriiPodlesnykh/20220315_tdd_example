@@ -1,8 +1,10 @@
 import static
         org.junit.jupiter.api.Assertions.*;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 public class CalculatorTest {
 
@@ -35,11 +37,22 @@ public class CalculatorTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    public void ThreeValuesShouldThrownException() {
-        int expected = 3;
 
-        assertThrows(UnsupportedOperationException.class, () ->  calculator.sum("1,2, 3"));
+    @Test
+    public void FiveValuesShouldReturnSum() {
+        int expected = 5;
+
+        int actual = calculator.sum("1,1,1,1,1");
+
+        assertEquals(expected, actual);
     }
 
+    @Test
+    public void TwoValuesNewLineShouldReturnSum() {
+        int expected = 6;
+
+        int actual = calculator.sum("1\n2,3");
+
+        assertEquals(expected, actual);
+    }
 }

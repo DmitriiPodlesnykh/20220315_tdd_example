@@ -1,3 +1,5 @@
+import org.apache.commons.lang3.StringUtils;
+
 public class Calculator {
 
     public int sum(String expression) {
@@ -5,10 +7,11 @@ public class Calculator {
             return 0;
         }
         int result = 0;
-        String[] array = expression.split(",");
-        if (array.length > 2) {
-            throw new UnsupportedOperationException();
-        }
+
+        String oneDelimArray = expression.replace("\n", ",");
+
+        String[] array = oneDelimArray.split(",");
+
         for (String s : array) {
             result = result + Integer.parseInt(s);
         }
