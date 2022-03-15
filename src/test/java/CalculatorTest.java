@@ -1,18 +1,15 @@
-import static
-        org.junit.jupiter.api.Assertions.*;
-
 import exception.NegativeNumberException;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
-public class CalculatorTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-    private Calculator calculator = new Calculator();
+class CalculatorTest {
+
+    private final Calculator calculator = new Calculator();
 
     @Test
-    public void EmptyStringShouldBe0() {
+    void emptyStringShouldBe0() {
         int expected = 0;
 
         int actual = calculator.sum("");
@@ -21,7 +18,7 @@ public class CalculatorTest {
     }
 
     @Test
-    public void oneValueShouldReturnSameValue() {
+    void oneValueShouldReturnSameValue() {
         int expected = 10;
 
         int actual = calculator.sum("10");
@@ -30,7 +27,7 @@ public class CalculatorTest {
     }
 
     @Test
-    public void TwoValuesShouldReturnSum() {
+    void twoValuesShouldReturnSum() {
         int expected = 3;
 
         int actual = calculator.sum("1,2");
@@ -40,7 +37,7 @@ public class CalculatorTest {
 
 
     @Test
-    public void FiveValuesShouldReturnSum() {
+    void fiveValuesShouldReturnSum() {
         int expected = 5;
 
         int actual = calculator.sum("1,1,1,1,1");
@@ -49,7 +46,7 @@ public class CalculatorTest {
     }
 
     @Test
-    public void TwoValuesNewLineShouldReturnSum() {
+    void twoValuesNewLineShouldReturnSum() {
         int expected = 6;
 
         int actual = calculator.sum("1\n2,3");
@@ -58,12 +55,12 @@ public class CalculatorTest {
     }
 
     @Test
-    public void oneValueNewLineShouldThrownException() {
+    void oneValueNewLineShouldThrownException() {
         assertThrows(UnsupportedOperationException.class, () -> calculator.sum("1,\n"));
     }
 
     @Test
-    public void anotherDelimShouldReturnSum() {
+    void anotherDelimShouldReturnSum() {
         int expected = 3;
 
         int actual = calculator.sum("//;\n1;2");
@@ -72,7 +69,7 @@ public class CalculatorTest {
     }
 
     @Test
-    public void spaceDelimShouldReturnSum() {
+    void spaceDelimShouldReturnSum() {
         int expected = 3;
 
         int actual = calculator.sum("// \n1 2");
@@ -81,9 +78,19 @@ public class CalculatorTest {
     }
 
     @Test
-    public void twoNegativeNumbersShouldThrownException() {
-        NegativeNumberException negativeNumberException
-                = assertThrows(NegativeNumberException.class, () -> calculator.sum("-1,-100,1"));
-        assertEquals(negativeNumberException.getMessage(), "[-1, -100]");
+    void twoNegativeNumbersShouldThrownException() {
+        NegativeNumberException exception = assertThrows(
+            NegativeNumberException.class, () -> calculator.sum("-1,-100,1"));
+
+        assertEquals("[-1, -100]", exception.getMessage());
+    }
+
+    @Test
+    void oneCharDelimInSquareBracketsShouldReturnSum() {
+        int expected = 6;
+
+        int actual = calculator.sum("//[*]\n1*2*3");
+
+        assertEquals(expected, actual);
     }
 }
