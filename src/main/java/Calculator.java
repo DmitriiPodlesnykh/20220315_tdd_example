@@ -11,16 +11,17 @@ public class Calculator {
         }
 
         String delimiter = String.valueOf(',');
+
         if (expression.startsWith("//[")) {
-            delimiter = String.valueOf(expression.charAt(3));
-            expression = expression.substring(6);
+            delimiter = expression.substring(3, expression.indexOf(']'));
+            expression = expression.substring(expression.indexOf('\n') + 1);
         } else if (expression.startsWith("//")) {
             delimiter = String.valueOf(expression.charAt(2));
             expression = expression.substring(4);
         }
 
-        if ("*".equals(delimiter)) {
-            delimiter = "\\*";
+        if (delimiter.contains("*")) {
+            delimiter = delimiter.replace("*", "\\*");
         }
         String oneDelimiterExpression = expression.replace("\n", delimiter);
         validate(oneDelimiterExpression);

@@ -93,4 +93,13 @@ class CalculatorTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    void multipleCharsDelimInSquareBracketsShouldReturnSum() {
+        int expected = 6;
+
+        int actual = calculator.sum("//[***]\n1***2***3");
+
+        assertEquals(expected, actual);
+    }
 }
