@@ -1,5 +1,4 @@
 import exception.NegativeNumberException;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,33 +9,51 @@ public class Calculator {
         if ("".equals(expression)) {
             return 0;
         }
-        Character delimValue = ',';
-        if (expression.startsWith("//")) {
-            delimValue = expression.charAt(2);
+
+        String delimiter = String.valueOf(',');
+
+        if (expression.startsWith("//[")) {
+            if (expression.indexOf('[', 3) > -1) {
+                String[] delimiters = expression.substring(3, expression.indexOf('\n') - 1).split("\\]\\[");
+                expression = expression.substring(expression.indexOf('\n') + 1);
+                String oneDelimiterExpression = expression.replace(delimiters[0], delimiters[1]);
+                return validateAndSumNumbers(oneDelimiterExpression, delimiters[1]);
+            }
+            delimiter = expression.substring(3, expression.indexOf(']'));
+            expression = expression.substring(expression.indexOf('\n') + 1);
+        } else if (expression.startsWith("//")) {
+            delimiter = String.valueOf(expression.charAt(2));
             expression = expression.substring(4);
         }
 
-        String oneDelimString = expression.replace("\n", String.valueOf(delimValue));
-        validateStringIncorrectValues(oneDelimString);
-        String[] array = oneDelimString.split(String.valueOf(delimValue));
-        validateNegativeNumbersCase(array);
-        return calculateResult(array);
+        if (delimiter.contains("*")) {
+            delimiter = delimiter.replace("*", "\\*");
+        }
+        String oneDelimiterExpression = expression.replace("\n", delimiter);
+        return validateAndSumNumbers(oneDelimiterExpression, delimiter);
     }
 
-    private void validateNegativeNumbersCase(String[] array) {
-        List<Integer> negativeValues = new ArrayList<>();
-        for (String s : array) {
-            int value = Integer.parseInt(s);
+    private int validateAndSumNumbers(String oneDelimiterExpression, String delimiter) {
+        validate(oneDelimiterExpression);
+        String[] numbers = oneDelimiterExpression.split(delimiter);
+        validateNegativeNumbers(numbers);
+        return sum(numbers);
+    }
+
+    private void validateNegativeNumbers(String[] numbers) {
+        List<Integer> negativeNumbers = new ArrayList<>();
+        for (String number : numbers) {
+            int value = Integer.parseInt(number);
             if (value < 0 ) {
-                negativeValues.add(value);
+                negativeNumbers.add(value);
             }
         }
-        if (!negativeValues.isEmpty()) {
-            throw new NegativeNumberException(negativeValues.toString());
+        if (!negativeNumbers.isEmpty()) {
+            throw new NegativeNumberException(negativeNumbers.toString());
         }
     }
 
-    private int calculateResult(String[] array) {
+    private int sum(String[] array) {
         int result = 0;
         for (String s : array) {
             int value = Integer.parseInt(s);
@@ -47,11 +64,9 @@ public class Calculator {
         return result;
     }
 
-    private void validateStringIncorrectValues(String oneDelimArray) {
-        if (oneDelimArray.contains(",,")) {
+    private void validate(String expression) {
+        if (expression.contains(",,")) {
             throw new UnsupportedOperationException();
         }
-
-
     }
 }
