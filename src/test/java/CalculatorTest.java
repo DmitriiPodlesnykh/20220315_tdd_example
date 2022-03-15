@@ -55,4 +55,27 @@ public class CalculatorTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void oneValueNewLineShouldThrownException() {
+        assertThrows(UnsupportedOperationException.class, () -> calculator.sum("1,\n"));
+    }
+
+    @Test
+    public void anotherDelimShouldReturnSum() {
+        int expected = 3;
+
+        int actual = calculator.sum("//;\n1;2");
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void spaceDelimShouldReturnSum() {
+        int expected = 3;
+
+        int actual = calculator.sum("// \n1 2");
+
+        assertEquals(expected, actual);
+    }
 }
