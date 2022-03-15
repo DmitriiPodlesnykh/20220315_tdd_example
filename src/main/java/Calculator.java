@@ -18,8 +18,12 @@ public class Calculator {
 
         String oneDelimString = expression.replace("\n", String.valueOf(delimValue));
         validateStringIncorrectValues(oneDelimString);
-
         String[] array = oneDelimString.split(String.valueOf(delimValue));
+        validateNegativeNumbersCase(array);
+        return calculateResult(array);
+    }
+
+    private void validateNegativeNumbersCase(String[] array) {
         List<Integer> negativeValues = new ArrayList<>();
         for (String s : array) {
             int value = Integer.parseInt(s);
@@ -31,12 +35,10 @@ public class Calculator {
             throw new NegativeNumberException(negativeValues.toString());
         }
 
-        return calculateResult(oneDelimString, delimValue);
     }
 
-    private int calculateResult(String oneDelimString, Character delimValue) {
+    private int calculateResult(String[] array) {
         int result = 0;
-        String[] array = oneDelimString.split(String.valueOf(delimValue));
         for (String s : array) {
             result = result + Integer.parseInt(s);
         }
