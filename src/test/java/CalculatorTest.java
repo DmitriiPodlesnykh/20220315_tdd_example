@@ -102,4 +102,22 @@ class CalculatorTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    void multipleDelimitersShouldReturnSum() {
+        int expected = 6;
+
+        int actual = calculator.sum("//[*][%]\n1*2%3");
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void multipleDelimitersWithAnyLengthShouldReturnSum() {
+        int expected = 6;
+
+        int actual = calculator.sum("//[**][%%]\n1**2%%3");
+
+        assertEquals(expected, actual);
+    }
 }

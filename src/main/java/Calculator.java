@@ -13,6 +13,12 @@ public class Calculator {
         String delimiter = String.valueOf(',');
 
         if (expression.startsWith("//[")) {
+            if (expression.indexOf('[', 3) > -1) {
+                String[] delimiters = expression.substring(3, expression.indexOf('\n') - 1).split("\\]\\[");
+                expression = expression.substring(expression.indexOf('\n') + 1);
+                String oneDelimiterExpression = expression.replace(delimiters[0], delimiters[1]);
+                return validateAndSumNumbers(oneDelimiterExpression, delimiters[1]);
+            }
             delimiter = expression.substring(3, expression.indexOf(']'));
             expression = expression.substring(expression.indexOf('\n') + 1);
         } else if (expression.startsWith("//")) {
@@ -24,10 +30,14 @@ public class Calculator {
             delimiter = delimiter.replace("*", "\\*");
         }
         String oneDelimiterExpression = expression.replace("\n", delimiter);
+        return validateAndSumNumbers(oneDelimiterExpression, delimiter);
+    }
+
+    private int validateAndSumNumbers(String oneDelimiterExpression, String delimiter) {
         validate(oneDelimiterExpression);
         String[] numbers = oneDelimiterExpression.split(delimiter);
         validateNegativeNumbers(numbers);
-        return calculateResult(numbers);
+        return sum(numbers);
     }
 
     private void validateNegativeNumbers(String[] numbers) {
@@ -43,7 +53,7 @@ public class Calculator {
         }
     }
 
-    private int calculateResult(String[] array) {
+    private int sum(String[] array) {
         int result = 0;
         for (String s : array) {
             result = result + Integer.parseInt(s);
