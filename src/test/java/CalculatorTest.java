@@ -2,14 +2,11 @@ import static
         org.junit.jupiter.api.Assertions.*;
 
 import exception.NegativeNumberException;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 public class CalculatorTest {
 
-    private Calculator calculator = new Calculator();
+    private final Calculator calculator = new Calculator();
 
     @Test
     public void EmptyStringShouldBe0() {
@@ -86,4 +83,16 @@ public class CalculatorTest {
                 = assertThrows(NegativeNumberException.class, () -> calculator.sum("-1,-100,1"));
         assertEquals(negativeNumberException.getMessage(), "[-1, -100]");
     }
+
+    @Test
+    public void twoValuesMoreThan1000ShouldReturnOnlyOneValue() {
+        int expected = 2;
+
+        int actual = calculator.sum("2,1001");
+
+        assertEquals(expected, actual);
+    }
+
+
+
 }

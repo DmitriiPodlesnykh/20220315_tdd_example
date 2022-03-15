@@ -34,13 +34,15 @@ public class Calculator {
         if (!negativeValues.isEmpty()) {
             throw new NegativeNumberException(negativeValues.toString());
         }
-
     }
 
     private int calculateResult(String[] array) {
         int result = 0;
         for (String s : array) {
-            result = result + Integer.parseInt(s);
+            int value = Integer.parseInt(s);
+            if (value < 1000) {
+                result = result + value;
+            }
         }
         return result;
     }
