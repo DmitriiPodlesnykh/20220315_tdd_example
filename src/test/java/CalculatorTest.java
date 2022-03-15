@@ -1,6 +1,7 @@
 import static
         org.junit.jupiter.api.Assertions.*;
 
+import exception.NegativeNumberException;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,5 +78,12 @@ public class CalculatorTest {
         int actual = calculator.sum("// \n1 2");
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void twoNegativeNumbersShouldThrownException() {
+        NegativeNumberException negativeNumberException
+                = assertThrows(NegativeNumberException.class, () -> calculator.sum("-1,-100,1"));
+        assertEquals(negativeNumberException.getMessage(), "[-1, -100]");
     }
 }
